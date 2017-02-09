@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>DFS Sofa 3D Render</title>
+	<link rel="stylesheet" href="//unpkg.com/tachyons@4.6.1/css/tachyons.min.css" />
+	<style type='text/css'>
+		body {
+			overflow: hidden;
+			background: #FFF;
+		}
+		
+		nav {
+			background-color: #8440ac;
+		}
+	</style>
+</head>
+<body>
+	<nav class="dt w-100 pa2 ph5-ns">
+		<div class="dtc v-mid mid-gray dim tr w-10">
+			<img class="dib w3 h2" src="http://www.dfs.co.uk/wcsstore8.00.00.215/DFSStorefrontAssetStore/images/dfs_logo.svg">
+		</div>
+		<div class="dtc v-mid w-85 pl2">
+			<h1 class="white f-audi-n normal f4 dib ma2 mr4-ns">DFS Sofa 3D Render</h1>
+		</div>
+	</nav>
+	<div class="fl w-100 mv3">
+		<button id="reset" class="mh3 f6 link dim br1 ba ph3 pv2 mb2 dib near-black">Reset</button>
+		<div class="tc">
+			<img id="image" src="">
+		</div>
+		<h3 class="tc f3 f-audi audi-grey ma2">Dynasty 3 Seater</h3>
+		<script type='text/javascript'>
+			var originalAlpha = 0;
+			var freezeAlpha = false;
+			
+			document.getElementById('reset').onclick = ()=> {freezeAlpha = false;};
+
+			function handleOrientation(event) {
+				var a = event.alpha;
+				if(!freezeAlpha){
+					originalAlpha = Math.abs(a);
+					freezeAlpha = true;
+				}
+				
+				var imageNum = Math.round((a - originalAlpha)/360*25 + 25) % 25;
+				var strImageNum = '' + imageNum;
+				if((''+imageNum).length === 1){
+					strImageNum = "0" + strImageNum;
+				}
+				
+				document.getElementById('image').src = `http://images.dfs.co.uk/i/dfs/dynasty_360${strImageNum}?$pdp-main-dk$`;
+			}
+
+			window.addEventListener('deviceorientation', handleOrientation);
+		</script>
+<script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='https://HOST:8082/browser-sync/browser-sync-client.js?v=2.18.6'><\/script>".replace("HOST", location.hostname));
+//]]></script>
+</body>
+
+</html>

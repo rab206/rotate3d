@@ -4,7 +4,7 @@ var gulp = require('gulp'),
 gulp.task('default', function() {
 
     browserSync({
-        files: 'public/index.html',
+        files: 'public/*.html',
         port: 8082
     });
 

@@ -4,6 +4,12 @@
   "description": "",
   "author": "Adam Bennett",
   "license": "ISC",
+  "main": "server.js",
+  "dependencies": {
+    "async": "~0.2.8",
+    "express": "4.10.2",
+    "socket.io": "1.2.0"
+  },
   "devDependencies": {
     "browser-sync": "^2.18.6",
     "gulp": "^3.9.1"
