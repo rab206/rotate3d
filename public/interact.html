@@ -5,14 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Audi 3D Render</title>
   <link rel="stylesheet" href="//unpkg.com/tachyons@4.6.1/css/tachyons.min.css" />
-  <style type='text/css'>
+	  <style type='text/css'>
     body {
       overflow: hidden;
       background: #FFF;
     }
-    
     nav {
-      background-color: #8440ac;
+      background-color: rgb(51, 65, 78);
+    }
+    @font-face {
+        font-family: "audiType_extended_bold";
+        src: url(fa69df9358792c6df532f4a0b15c5ebb.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_extended_bold";
+        src: url(fa69df9358792c6df532f4a0b15c5ebb.woff) format("woff");
+        font-weight: bold
+    }
+    
+    @font-face {
+        font-family: "audiType_bold";
+        src: url(8e139687529899a2fdaad2463fd2d453.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_bold";
+        src: url(8e139687529899a2fdaad2463fd2d453.woff) format("woff");
+        font-weight: bold
+    }
+    
+    @font-face {
+        font-family: "audiType_extended_normal";
+        src: url(ddaa70e4850aa8a71828ea2c37574481.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_extended_normal";
+        src: url(ddaa70e4850aa8a71828ea2c37574481.woff) format("woff");
+        font-weight: bold
+    }
+    
+    @font-face {
+        font-family: "audiType_normal";
+        src: url(22d02a5ecba352b4f68b523df79dd92f.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_normal";
+        src: url(22d02a5ecba352b4f68b523df79dd92f.woff) format("woff");
+        font-weight: bold
+    }
+    .f-audi {
+      font-family: AudiTypeExtendedBold,Verdana,sans-serif;
+    }
+    .f-audi-n {
+      font-family: audiType_normal;
+    }
+    .f-audi-en {
+      font-family: audiType_extended_normal;
+    }
+    .audi-grey {
+      color: #555;
+    }
+    .opt-img {
+      max-height: 100px;
     }
   </style>
 	<script src="/socket.io/socket.io.js"></script>
@@ -21,10 +82,10 @@
 <body>
   <nav class="dt w-100 pa2 ph5-ns">
     <div class="dtc v-mid mid-gray dim tr w-10">
-      <img class="dib w3 h2" src="//www.dfs.co.uk/wcsstore8.00.00.215/DFSStorefrontAssetStore/images/dfs_logo.svg">
+      <img class="dib w3 h2" src="https://www.audi.co.uk/etc/audi-ui/global/img/audi-logo.svg">
     </div>
     <div class="dtc v-mid w-85 pl2">
-      <h1 class="white f-audi-n normal f4 dib ma2 mr4-ns">Audi 3D Render</h1>
+      <h1 class="white f-audi-n normal f4 dib ma2 mr4-ns">Audi 3D Controller</h1>
     </div>
   </nav>
   <div class="fl w-100 mv3">
@@ -34,28 +95,34 @@
     </div>
     <h3 class="tc f3 f-audi audi-grey ma2">Audi R8</h3>
     <script type='text/javascript'>
-      var freezeAlpha = false;
+      var reset = false;
+      var originalAlpha, originalBeta, originalGamma;
+      originalAlpha = originalBeta = originalGamma = 0;
 
       /* global io */
-
+  
       document.getElementById('reset').onclick = () => {
-        freezeAlpha = false;
+        reset = true;
       };
       
       var socket = io.connect();
       
       function handleOrientation(event) {
-        var a = event.alpha * Math.PI / 180,
-          b = event.beta * Math.PI / 180,
-          g = event.gamma * Math.PI / 180;
-        // if(!freezeAlpha){
-        // 	originalAlpha = Math.abs(a);
-        // 	freezeAlpha = true;
-        // }
+        if(reset){
+        	originalAlpha = a;
+        	originalBeta = b;
+        	originalGamma = g;
+        	reset = false;
+        }
+        
+        var a = (event.alpha - originalAlpha) * Math.PI / 180,
+          b = (event.beta - originalBeta) * Math.PI / 180,
+          g = (event.gamma - originalGamma) * Math.PI / 180;
+        
         socket.emit('interact', {
-          g,
           a,
-          b
+          b,
+          g
         });
       }
       window.addEventListener('deviceorientation', handleOrientation);

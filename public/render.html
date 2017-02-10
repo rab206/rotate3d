@@ -5,16 +5,77 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Audi 3D Render</title>
 	<link rel="stylesheet" href="//unpkg.com/tachyons@4.6.1/css/tachyons.min.css" />
-	<style type='text/css'>
-		body {
-			overflow: hidden;
-			background: #FFF;
-		}
-		
-		nav {
-			background-color: #8440ac;
-		}
-	</style>
+  <style type='text/css'>
+    body {
+      overflow: hidden;
+      background: #FFF;
+    }
+    nav {
+      background-color: rgb(51, 65, 78);
+    }
+    @font-face {
+        font-family: "audiType_extended_bold";
+        src: url(fa69df9358792c6df532f4a0b15c5ebb.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_extended_bold";
+        src: url(fa69df9358792c6df532f4a0b15c5ebb.woff) format("woff");
+        font-weight: bold
+    }
+    
+    @font-face {
+        font-family: "audiType_bold";
+        src: url(8e139687529899a2fdaad2463fd2d453.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_bold";
+        src: url(8e139687529899a2fdaad2463fd2d453.woff) format("woff");
+        font-weight: bold
+    }
+    
+    @font-face {
+        font-family: "audiType_extended_normal";
+        src: url(ddaa70e4850aa8a71828ea2c37574481.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_extended_normal";
+        src: url(ddaa70e4850aa8a71828ea2c37574481.woff) format("woff");
+        font-weight: bold
+    }
+    
+    @font-face {
+        font-family: "audiType_normal";
+        src: url(22d02a5ecba352b4f68b523df79dd92f.woff) format("woff");
+        font-weight: normal
+    }
+    
+    @font-face {
+        font-family: "audiType_normal";
+        src: url(22d02a5ecba352b4f68b523df79dd92f.woff) format("woff");
+        font-weight: bold
+    }
+    .f-audi {
+      font-family: AudiTypeExtendedBold,Verdana,sans-serif;
+    }
+    .f-audi-n {
+      font-family: audiType_normal;
+    }
+    .f-audi-en {
+      font-family: audiType_extended_normal;
+    }
+    .audi-grey {
+      color: #555;
+    }
+    .opt-img {
+      max-height: 100px;
+    }
+  </style>
 	
  	<script src="//cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
 	<script src="threejs/js/loaders/collada/Animation.js"></script>
@@ -24,16 +85,15 @@
 	
 </head>
 <body>
-	<nav class="dt w-100 pa2 ph5-ns">
-		<div class="dtc v-mid mid-gray dim tr w-10">
-			<img class="dib w3 h2" src="//www.dfs.co.uk/wcsstore8.00.00.215/DFSStorefrontAssetStore/images/dfs_logo.svg">
-		</div>
-		<div class="dtc v-mid w-85 pl2">
-			<h1 class="white f-audi-n normal f4 dib ma2 mr4-ns">Audi 3D Render</h1>
-		</div>
-	</nav>
+  <nav class="dt w-100 pa2 ph5-ns">
+    <div class="dtc v-mid mid-gray dim tr w-10">
+      <img class="dib w3 h2" src="https://www.audi.co.uk/etc/audi-ui/global/img/audi-logo.svg">
+    </div>
+    <div class="dtc v-mid w-85 pl2">
+      <h1 class="white f-audi-n normal f4 dib ma2 mr4-ns">Audi Rotateable 3D Render</h1>
+    </div>
+  </nav>
 	<div class="fl w-100 mv3">
-		<button id="reset" class="mh3 f6 link dim br1 ba ph3 pv2 mb2 dib near-black">Reset</button>
 		<div class="tc">
 			<div id="container"></div>
 
@@ -52,7 +112,7 @@
 
 			var loader = new THREE.ColladaLoader();
 			loader.options.convertUpAxis = true;
-			loader.load( 'model.dae', function ( collada ) {
+			loader.load( 'sofa/model.dae', function ( collada ) {
 
 				dae = collada.scene;
 
@@ -85,26 +145,6 @@
 				camera.position.set( 0, 0, 0 );
 
 				scene = new THREE.Scene();
-
-				// // Grid
-
-				// var size = 14, step = 1;
-
-				// var geometry = new THREE.Geometry();
-				// var material = new THREE.LineBasicMaterial( { color: 0x303030 } );
-
-				// for ( var i = - size; i <= size; i += step ) {
-
-				// 	geometry.vertices.push( new THREE.Vector3( - size, - 0.04, i ) );
-				// 	geometry.vertices.push( new THREE.Vector3(   size, - 0.04, i ) );
-
-				// 	geometry.vertices.push( new THREE.Vector3( i, - 0.04, - size ) );
-				// 	geometry.vertices.push( new THREE.Vector3( i, - 0.04,   size ) );
-
-				// }
-
-				// var line = new THREE.LineSegments( geometry, material );
-				// scene.add( line );
 
 				scene.add( dae );
 
@@ -165,10 +205,21 @@
 				renderer.render( scene, camera );
 
 			}
+			
+			var rotWorldMatrix;
+
+			// Rotate an object around an arbitrary axis in world space       
+			function rotateAroundWorldAxis(object, axis, radians) {
+			    rotWorldMatrix = new THREE.Matrix4();
+			    rotWorldMatrix.makeRotationAxis(axis.normalize(), radians);
+			    object.matrix.multiply(rotWorldMatrix);        // pre-multiply
+			    object.matrix = rotWorldMatrix;
+			    object.setRotationFromMatrix(rotWorldMatrix);
+			}
+			
 	    var socket = io();
 		          
       socket.on('update3d', function(msg){
-      	console.log("socket", msg);
         dae.rotation.set(msg.g, msg.a, msg.b);
       });
 
